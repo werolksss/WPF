@@ -1,0 +1,238 @@
+﻿<Window x:Class="KeyboardTrainer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Keyboard Trainer"
+        Width="1000"
+        Height="490"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen"
+        PreviewKeyDown="Window_PreviewKeyDown"
+        PreviewKeyUp="Window_PreviewKeyUp"
+        Loaded="Window_Loaded">
+
+    <Window.Resources>
+        <Style x:Key="KeyButton" TargetType="Button">
+            <Setter Property="Width" Value="55"/>
+            <Setter Property="Height" Value="55"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderBrush" Value="#333333"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="IsHitTestVisible" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="9">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="GrayKey" TargetType="Button" BasedOn="{StaticResource KeyButton}">
+            <Setter Property="Background" Value="#BEBEBE"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+
+        <Style x:Key="PinkKey" TargetType="Button" BasedOn="{StaticResource KeyButton}">
+            <Setter Property="Background" Value="#F06B91"/>
+        </Style>
+
+        <Style x:Key="YellowKey" TargetType="Button" BasedOn="{StaticResource KeyButton}">
+            <Setter Property="Background" Value="#F1FF69"/>
+        </Style>
+
+        <Style x:Key="GreenKey" TargetType="Button" BasedOn="{StaticResource KeyButton}">
+            <Setter Property="Background" Value="#6BF56E"/>
+        </Style>
+
+        <Style x:Key="BlueKey" TargetType="Button" BasedOn="{StaticResource KeyButton}">
+            <Setter Property="Background" Value="#70C4F5"/>
+        </Style>
+
+        <Style x:Key="PurpleKey" TargetType="Button" BasedOn="{StaticResource KeyButton}">
+            <Setter Property="Background" Value="#D86BEF"/>
+        </Style>
+
+        <Style x:Key="SpaceKey" TargetType="Button" BasedOn="{StaticResource KeyButton}">
+            <Setter Property="Background" Value="#EBC475"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Width" Value="350"/>
+        </Style>
+    </Window.Resources>
+
+    <Border BorderBrush="#2E86C1" BorderThickness="1" Background="White">
+        <Grid Margin="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="461*"/>
+                <ColumnDefinition Width="533*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="37"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="170"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="110"/>
+                    <ColumnDefinition Width="220"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Speed:" FontSize="18"/>
+                    <TextBlock x:Name="SpeedText" Text="0 chars/min" FontSize="18" FontWeight="Bold" Margin="5,0,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Fails:" FontSize="18"/>
+                    <TextBlock x:Name="FailsText" Text="0" FontSize="18" FontWeight="Bold" Margin="5,0,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Difficulty:" FontSize="18"/>
+                    <TextBlock x:Name="DifficultyText" Text="5" FontSize="18" FontWeight="Bold" Margin="5,0,0,0"/>
+                </StackPanel>
+
+                <Slider x:Name="DifficultySlider"
+                        Grid.Column="3"
+                        Minimum="1"
+                        Maximum="10"
+                        Value="5"
+                        Width="130"
+                        VerticalAlignment="Center"
+                        TickFrequency="1"
+                        IsSnapToTickEnabled="True"
+                        ValueChanged="DifficultySlider_ValueChanged"/>
+
+                <CheckBox x:Name="CaseSensitiveCheckBox"
+                          Grid.Column="4"
+                          Content="Case Sensitive"
+                          FontSize="16"
+                          VerticalAlignment="Center"/>
+            </Grid>
+
+            <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="220"/>
+                    <ColumnDefinition Width="220"/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="StartButton"
+                        Grid.Column="1"
+                        Content="Start"
+                        Height="24"
+                        FontSize="14"
+                        Click="StartButton_Click"/>
+
+                <Button x:Name="StopButton"
+                        Grid.Column="2"
+                        Content="Stop"
+                        Height="24"
+                        FontSize="14"
+                        Margin="5,0,0,0"
+                        Click="StopButton_Click"
+                        IsEnabled="False"/>
+            </Grid>
+
+            <Border Grid.Row="2" Background="#BEEFF8" Margin="0,2,0,4" Grid.ColumnSpan="2">
+                <TextBlock x:Name="TaskText"
+                           FontSize="23"
+                           FontFamily="Consolas"
+                           TextWrapping="Wrap"
+                           VerticalAlignment="Center"
+                           Text="Press Start to begin"/>
+            </Border>
+
+            <StackPanel Grid.Row="3" VerticalAlignment="Top" Grid.ColumnSpan="2">
+                <WrapPanel HorizontalAlignment="Center">
+                    <Button Content="`" Tag="Oem3" Style="{StaticResource PinkKey}"/>
+                    <Button Content="1" Tag="D1" Style="{StaticResource PinkKey}"/>
+                    <Button Content="2" Tag="D2" Style="{StaticResource PinkKey}"/>
+                    <Button Content="3" Tag="D3" Style="{StaticResource YellowKey}"/>
+                    <Button Content="4" Tag="D4" Style="{StaticResource GreenKey}"/>
+                    <Button Content="5" Tag="D5" Style="{StaticResource BlueKey}"/>
+                    <Button Content="6" Tag="D6" Style="{StaticResource BlueKey}"/>
+                    <Button Content="7" Tag="D7" Style="{StaticResource PurpleKey}"/>
+                    <Button Content="8" Tag="D8" Style="{StaticResource PurpleKey}"/>
+                    <Button Content="9" Tag="D9" Style="{StaticResource YellowKey}"/>
+                    <Button Content="0" Tag="D0" Style="{StaticResource YellowKey}"/>
+                    <Button Content="-" Tag="OemMinus" Style="{StaticResource GreenKey}"/>
+                    <Button Content="=" Tag="OemPlus" Style="{StaticResource GreenKey}"/>
+                    <Button Content="Backspace" Tag="Back" Width="110" Style="{StaticResource GrayKey}"/>
+                </WrapPanel>
+
+                <WrapPanel HorizontalAlignment="Center">
+                    <Button Content="Tab" Tag="Tab" Width="85" Style="{StaticResource GrayKey}"/>
+                    <Button Content="q" Tag="Q" Style="{StaticResource PinkKey}"/>
+                    <Button Content="w" Tag="W" Style="{StaticResource YellowKey}"/>
+                    <Button Content="e" Tag="E" Style="{StaticResource GreenKey}"/>
+                    <Button Content="r" Tag="R" Style="{StaticResource BlueKey}"/>
+                    <Button Content="t" Tag="T" Style="{StaticResource BlueKey}"/>
+                    <Button Content="y" Tag="Y" Style="{StaticResource PurpleKey}"/>
+                    <Button Content="u" Tag="U" Style="{StaticResource PurpleKey}"/>
+                    <Button Content="i" Tag="I" Style="{StaticResource PinkKey}"/>
+                    <Button Content="o" Tag="O" Style="{StaticResource YellowKey}"/>
+                    <Button Content="p" Tag="P" Style="{StaticResource GreenKey}"/>
+                    <Button Content="[" Tag="OemOpenBrackets" Style="{StaticResource GreenKey}"/>
+                    <Button Content="]" Tag="Oem6" Style="{StaticResource GreenKey}"/>
+                    <Button Content="\" Tag="Oem5" Style="{StaticResource GreenKey}"/>
+                </WrapPanel>
+
+                <WrapPanel HorizontalAlignment="Center">
+                    <Button Content="Caps Lock" Tag="CapsLock" Width="115" Style="{StaticResource GrayKey}"/>
+                    <Button Content="a" Tag="A" Style="{StaticResource PinkKey}"/>
+                    <Button Content="s" Tag="S" Style="{StaticResource YellowKey}"/>
+                    <Button Content="d" Tag="D" Style="{StaticResource GreenKey}"/>
+                    <Button Content="f" Tag="F" Style="{StaticResource BlueKey}"/>
+                    <Button Content="g" Tag="G" Style="{StaticResource BlueKey}"/>
+                    <Button Content="h" Tag="H" Style="{StaticResource PurpleKey}"/>
+                    <Button Content="j" Tag="J" Style="{StaticResource PurpleKey}"/>
+                    <Button Content="k" Tag="K" Style="{StaticResource PinkKey}"/>
+                    <Button Content="l" Tag="L" Style="{StaticResource YellowKey}"/>
+                    <Button Content=";" Tag="Oem1" Style="{StaticResource GreenKey}"/>
+                    <Button Content="'" Tag="OemQuotes" Style="{StaticResource GreenKey}"/>
+                    <Button Content="Enter" Tag="Enter" Width="110" Style="{StaticResource GrayKey}"/>
+                </WrapPanel>
+
+                <WrapPanel HorizontalAlignment="Center">
+                    <Button Content="Shift" Tag="LeftShift" Width="145" Style="{StaticResource GrayKey}"/>
+                    <Button Content="z" Tag="Z" Style="{StaticResource PinkKey}"/>
+                    <Button Content="x" Tag="X" Style="{StaticResource YellowKey}"/>
+                    <Button Content="c" Tag="C" Style="{StaticResource GreenKey}"/>
+                    <Button Content="v" Tag="V" Style="{StaticResource BlueKey}"/>
+                    <Button Content="b" Tag="B" Style="{StaticResource BlueKey}"/>
+                    <Button Content="n" Tag="N" Style="{StaticResource PurpleKey}"/>
+                    <Button Content="m" Tag="M" Style="{StaticResource PurpleKey}"/>
+                    <Button Content="," Tag="OemComma" Style="{StaticResource PinkKey}"/>
+                    <Button Content="." Tag="OemPeriod" Style="{StaticResource YellowKey}"/>
+                    <Button Content="/" Tag="OemQuestion" Style="{StaticResource GreenKey}"/>
+                    <Button Content="Shift" Tag="RightShift" Width="145" Style="{StaticResource GrayKey}"/>
+                </WrapPanel>
+
+                <WrapPanel HorizontalAlignment="Center">
+                    <Button Content="Ctrl" Tag="LeftCtrl" Width="85" Style="{StaticResource GrayKey}"/>
+                    <Button Content="Win" Tag="LWin" Width="85" Style="{StaticResource GrayKey}"/>
+                    <Button Content="Alt" Tag="LeftAlt" Width="85" Style="{StaticResource GrayKey}"/>
+                    <Button Content="Space" Tag="Space" Style="{StaticResource SpaceKey}"/>
+                    <Button Content="Alt" Tag="RightAlt" Width="85" Style="{StaticResource GrayKey}"/>
+                    <Button Content="Win" Tag="RWin" Width="85" Style="{StaticResource GrayKey}"/>
+                    <Button Content="Ctrl" Tag="RightCtrl" Width="85" Style="{StaticResource GrayKey}"/>
+                </WrapPanel>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>
